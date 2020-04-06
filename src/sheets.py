@@ -17,7 +17,7 @@ def get_data() -> (dict, [[str]]):
     results = get_results()
     return elos, results
 
-def calculate(elos_and_results: (dict, [[str]])) -> None:
+def calculate(elos_and_results: (dict, [[str]])) -> dict:
     elos, results = elos_and_results
     for game in results:
         total_elo = sum([elos[name] for name in game])

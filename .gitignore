@@ -1,6 +1,3 @@
-credentials.json
-token.pickle
-sheets_setup.py
 bin/
 include/
 lib/
