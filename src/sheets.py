@@ -20,24 +20,29 @@ def get_data() -> (dict, [[str]]):
 def calculate(elos_and_results: (dict, [[str]])) -> dict:
     elos, results = elos_and_results
     for game in results:
-        total_elo = sum([elos[player][0] for player in game])
+        total_elo = sum(elos[player][0] for player in game)
         expected_scores = []
         for player in game:
             average_of_others = (total_elo - elos[player][0])/3
             expected_scores.append(1/(1 + 10**((average_of_others - elos[player][0])/400))) #Elo formula
         #expected_scores[i] stores the expected score for game[i]
+            
         result = lambda i: 1 if i == 0 else 0
         #because data is stored so that game[0] is the winner of the game
+        
         elo_change = lambda result, expected: round(32*(result - expected)) if result == 1 else round(32*(result - expected)/3)
         #losers lose 1/3 of what they should lose so that Elo is roughly conserved
+        
         for i, player in enumerate(game):
             player_change = elo_change(result(i), expected_scores[i])
             elos[player] = (elos[player][0] + player_change, player_change)
         #adjust elos
+            
         for player in elos:
             if player not in game:
                 elos[player] = (elos[player][0], 0)
         #set change of players who weren't in this game to 0
+                
     return elos
 
 def str_of_elo_change(change: int) -> str:
